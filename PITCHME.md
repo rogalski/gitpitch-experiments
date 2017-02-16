@@ -23,7 +23,7 @@ https://youtu.be/wf-BqAjZb8M
 5. Interesujące przypadki użycia
 
 #HSLIDE
-```
+```python
 3 * [1,2,3] == [1,2,3,1,2,3,1,2,3]
 
 "GDA" in "PyGDA"
@@ -53,7 +53,7 @@ Oczywiście tak! 😉
 _exploting the features of the Python language to produce code that is clear, concise and maintainable_
 
 #HSLIDE
-```
+```python
 class Color:
     def __init__(self, r, g, b):
        self.r, self.g, self.b = r, g, b
@@ -62,7 +62,7 @@ black = Color (0, 0, 0)
 ```
 
 #HSLIDE
-```
+```python
 class Color:
     def __init__(self, r, g, b):
        self.r, self.g, self.b = r, g, b
@@ -73,7 +73,7 @@ assert black1 == black2  # AssertionError!
 ```
 
 #HSLIDE
-```
+```python
 class Color:
     def __init__(self, r, g, b):
         self.r, self.g, self.b = r, g, b
@@ -114,7 +114,7 @@ Aby wykonać metodę, konieczne jest obliczenie wartości wszystkich argumentów
 - ✅     `a & b`     `# __and__`
 
 #HSLIDE
-# Interesujące przypadki użycia
+## Interesujące przypadki użycia
 
 Co powinno zwrócić `a < b`?
 - `NotImplementedError`
@@ -124,7 +124,7 @@ Co powinno zwrócić `a < b`?
 
 #HSLIDE
 ## Numpy: przykład 1
-```
+```python
 import numpy as np
 array = np.array(range(10))
 # array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
@@ -140,7 +140,7 @@ bigger_than_5
 - wynik działania: macierz wartości typu _boolean_ o tych samych wymiarach co bazowa macierz
 - wartości w macierzy: `True` kiedy wartość jest większa niż skalar, w innym wypadku `False`
 
-```
+```python
 array > 5 # array([False, False, False, False, False, False,  
           #        True,  True,  True,  True], dtype=bool)
 ```
@@ -151,7 +151,7 @@ array > 5 # array([False, False, False, False, False, False,
 - `np.array` przeciąża operator `__getitem__`
 - kiedy objekt wewnątrz nawiasów kwadratowych jest macierzą typu _boolean_, zwracany jest podzbiór macierzy wejściowej (z wybranymi wierszami i kolumnami)
 
-```
+```python
 array = np.array(range(10))
 assert array[array > 5] == np.array([6, 7, 8, 9])
 ```
@@ -162,7 +162,7 @@ Nieintuicyjny wynik porównania między macierzą i skalaerem pozwolił na uzysk
 #HSLIDE
 ## SQLAlchemy: przykład
 
-```
+```python
 q = db.Table.query
 q = q.filter_by(db.Table.column1 == '123')
 q = q.filter_by(sth in db.Table.column2'')
