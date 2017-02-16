@@ -1,6 +1,6 @@
 #HSLIDE
 
-## A niech mnie `__dunder__` świśnie
+# A niech mnie `__dunder__` świśnie
 ### O przeciążaniu operatorów w Pythonie
 Łukasz Rogalski
 
@@ -8,7 +8,7 @@
 ## Inspiracja
 Raymond Hettinger
 
-*Beyond PEP 8 -- Best practices for beautiful intelligible code*
+*Beyond PEP 8: Best practices for beautiful intelligible code*
 
 PyCon 2015
 
@@ -16,9 +16,11 @@ https://youtu.be/wf-BqAjZb8M
 
 #HSLIDE
 ## Plan prezentacji
-1. Na czym polega przeciążanie, dlaczego warto to robić?
-2. Szybki przeglad wraz z przykladami
-3. Interesujące przypadki użycia
+1. Na czym polega przeciążanie
+2. Dlaczego warto przeciążać?
+3. Przykłady
+4. Czego nie można przeciążyć i dlaczego?
+5. Interesujące przypadki użycia
 
 #HSLIDE
 ```
@@ -40,13 +42,15 @@ path2 = Path / 'subdir'
 
 #HSLIDE
 - wiele wbudowanych klas (jak i klas w bibliotece standardowej) przeciąża operatory
-- czy można zaimplementować klasę dla której będzie można kontrolować przeciążanie?
+- czy można zaimplementować klasę która przeciąży operator zgodnie z naszymi potrzebami?
 
 Oczywiście tak! 😉
 
 #HSLIDE
 ## Cel
-**pythonic code**: _exploting the features of the Python language to produce code that is clear, concise and maintainable_
+**pythonic**
+
+_exploting the features of the Python language to produce code that is clear, concise and maintainable_
 
 #HSLIDE
 ```
