@@ -1,10 +1,11 @@
+#HSLIDE
+
 # A niech mnie `__dunder__` świśnie
 ## O przeciążaniu operatorów w Pythonie
-
 Łukasz Rogalski
 
+#HSLIDE
 # Inspiracja
-
 Raymond Hettinger
 
 *Beyond PEP 8 -- Best practices for beautiful intelligible code*
@@ -13,13 +14,13 @@ PyCon 2015
 
 https://youtu.be/wf-BqAjZb8M
 
-
+#HSLIDE
 # Plan prezentacji
 1. Na czym polega przeciążanie, dlaczego warto to robić?
 2. Szybki przeglad wraz z przykladami
 3. Interesujące przypadki użycia
 
-
+#HSLIDE
 ```
 #
 3 * [1,2,3] == [1,2,3,1,2,3,1,2,3]
@@ -38,11 +39,13 @@ path = Path()
 path2 = Path / 'subdir'
 ```
 
+#HSLIDE
 - wiele wbudowanych klas (jak i klas w bibliotece standardowej) przeciąża operatory
 - czy można zaimplementować klasę dla której będzie można kontrolować przeciążanie?
 
 Oczywiście tak! 😉
 
+#HSLIDE
 # Cel
 **pythonic code**: _exploting the features of the Python language to produce code that is clear, concise and maintainable_
 
@@ -53,12 +56,8 @@ class Color:
 
 black = Color (0, 0, 0)
 ```
-class COlor;
-    def __init__(self, r, g, b):
-       self.r, self.g, self.b = r, g, b
 
-Starting from most common  `__eq__`, `__ne__`
-
+#HSLIDE
 ```
 class Color:
     def __init__(self, r, g, b):
@@ -69,6 +68,7 @@ black2 = Color(0, 0, 0)
 assert black1 == black2  # AsserionError!
 ```
 
+#HSLIDE
 ```
 class Color:
     def __init__(self, r, g, b):
@@ -84,14 +84,17 @@ black1 = Color(0, 0, 0)
 black2 = Color(0, 0, 0)
 assert black1 == black2
 ```
+#HSLIDE
 
 # Co nie jest przeciążalne
+#HSLIDE
 
 ## Operator tożsamości (ang. _identity_) - `is`
 
 Dlaczego? Bo tak mówi specyfikacja.
 
 _Every object has an identity, a type and a value. An object’s identity never changes once it has been created; you may think of it as the object’s address in memory. The `is` operator compares the identity of two objects; the `id()` function returns an integer representing its identity._
+#HSLIDE
 
 ## Operacje logiczne
 
@@ -106,6 +109,7 @@ Aby wykonać metodę, konieczne jest obliczenie wartości wszystkich argumentów
 - ❌ `a and b`
 - ✅ `a & b` (`__and__`)
 
+#HSLIDE
 # Interesujące przypadki użycia
 
 Co powinno zwrócić `a < b`?
@@ -114,6 +118,7 @@ Co powinno zwrócić `a < b`?
 - `False`
 - Coś innego?
 
+#HSLIDE
 ## Numpy: przykład 1
 ```
 import numpy as np
@@ -123,6 +128,8 @@ bigger_than_5 = array[array > 5]
 bigger_than_5
 # array([6, 7, 8, 9])
 ```
+
+#HSLIDE
 ## Numpy: tlumaczenie (1)
 
 - `np.array` przeciąża operator `__gt__`
@@ -134,6 +141,7 @@ array > 5
 # array([False, False, False, False, False, False,  True,  True,  True,  True], dtype=bool)
 ```
 
+#HSLIDE
 ## Numpy: tlumaczenie (2)
 
 - `np.array` przeciąża operator `__getitem__`
@@ -143,7 +151,7 @@ Wynik: `np.array([6, 7, 8, 9])`
 
 Nieintuicyjny wynik porównania między macierzą i skalaerem pozwolił na uzyskanie prostego i czytelnego API z perspektywy programisty wykorzystującego bibliotekę.
 
-
+#HSLIDE
 ## SQLAlchemy: przykład
 
 ```
@@ -159,8 +167,10 @@ sth := where column 1 == 1
 
 Nieintuicyjny wynik przeciążonej operacji między obiektem reprezentującym kolumnę w tabeli a innym obiektem pozwolił na uzyskanie prostego i czytelnego API z perspektywy programisty wykorzystującego bibliotekę.
 
+#HSLIDE
 # Dzięki!
 
+#HSLIDE
 # Linki
 - [Python Data Model](https://docs.python.org/3/reference/datamodel.html)
 - [R. Hettinger *Beyond PEP 8 -- Best practices for beautiful intelligible code*](https://youtu.be/wf-BqAjZb8M)
