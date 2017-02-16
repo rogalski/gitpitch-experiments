@@ -1,11 +1,11 @@
 #HSLIDE
 
-# A niech mnie `__dunder__` świśnie
-## O przeciążaniu operatorów w Pythonie
+## A niech mnie `__dunder__` świśnie
+### O przeciążaniu operatorów w Pythonie
 Łukasz Rogalski
 
 #HSLIDE
-# Inspiracja
+## Inspiracja
 Raymond Hettinger
 
 *Beyond PEP 8 -- Best practices for beautiful intelligible code*
@@ -15,14 +15,13 @@ PyCon 2015
 https://youtu.be/wf-BqAjZb8M
 
 #HSLIDE
-# Plan prezentacji
+## Plan prezentacji
 1. Na czym polega przeciążanie, dlaczego warto to robić?
 2. Szybki przeglad wraz z przykladami
 3. Interesujące przypadki użycia
 
 #HSLIDE
 ```
-#
 3 * [1,2,3] == [1,2,3,1,2,3,1,2,3]
 
 "GDA" in "PyGDA"
@@ -46,9 +45,10 @@ path2 = Path / 'subdir'
 Oczywiście tak! 😉
 
 #HSLIDE
-# Cel
+## Cel
 **pythonic code**: _exploting the features of the Python language to produce code that is clear, concise and maintainable_
 
+#HSLIDE
 ```
 class Color:
     def __init__(self, r, g, b):
@@ -65,7 +65,7 @@ class Color:
 
 black1 = Color(0, 0, 0)
 black2 = Color(0, 0, 0)
-assert black1 == black2  # AsserionError!
+assert black1 == black2  # AssertionError!
 ```
 
 #HSLIDE
@@ -86,28 +86,28 @@ assert black1 == black2
 ```
 #HSLIDE
 
-# Co nie jest przeciążalne
+## Co nie jest przeciążalne
 #HSLIDE
 
-## Operator tożsamości (ang. _identity_) - `is`
+### Operator tożsamości (ang. _identity_) - `is`
 
 Dlaczego? Bo tak mówi specyfikacja.
 
 _Every object has an identity, a type and a value. An object’s identity never changes once it has been created; you may think of it as the object’s address in memory. The `is` operator compares the identity of two objects; the `id()` function returns an integer representing its identity._
 #HSLIDE
 
-## Operacje logiczne
+### Operacje logiczne
 
 `my_obj1 and my_obj2`
 
-### Dlaczego?
+#### Dlaczego?
 
 Aby wykonać metodę, konieczne jest obliczenie wartości wszystkich argumentów wejściowych. Wykonanie tych argumentów powoduje złamanie zasady leniwego wykonania, która jest zagwarantowana.
 
-- ❌ `a or b`
-- ✅ `a | b` (`__or__`)
-- ❌ `a and b`
-- ✅ `a & b` (`__and__`)
+- ❌     `a or b`
+- ✅     `a | b`     `# __or__`
+- ❌     `a and b`
+- ✅     `a & b`     `# __and__`
 
 #HSLIDE
 # Interesujące przypadki użycia
@@ -130,25 +130,29 @@ bigger_than_5
 ```
 
 #HSLIDE
-## Numpy: tlumaczenie (1)
+## Numpy: tłumaczenie (1)
 
 - `np.array` przeciąża operator `__gt__`
 - wynik działania: macierz wartości typu _boolean_ o tych samych wymiarach co bazowa macierz
-- wartości w macierzy: `True` kiedy wartość jest większa niż skalar, inaczej `False`
+- wartości w macierzy: `True` kiedy wartość jest większa niż skalar, w innym wypadku `False`
 
 ```
-array > 5
-# array([False, False, False, False, False, False,  True,  True,  True,  True], dtype=bool)
+array > 5 # array([False, False, False, False, False, False,  
+          #        True,  True,  True,  True], dtype=bool)
 ```
 
 #HSLIDE
-## Numpy: tlumaczenie (2)
+### Numpy: tłumaczenie (2)
 
 - `np.array` przeciąża operator `__getitem__`
-- kiedy objekt wewnątrz nawiasów kwadratowych jest macierzą typu _boolean_, zwracany jest podzbiór macierzy wejściowej (z wybrnaymi wierszami i kolumnami)
+- kiedy objekt wewnątrz nawiasów kwadratowych jest macierzą typu _boolean_, zwracany jest podzbiór macierzy wejściowej (z wybranymi wierszami i kolumnami)
 
-Wynik: `np.array([6, 7, 8, 9])`
+```
+array = np.array(range(10))
+assert array[array > 5] == np.array([6, 7, 8, 9])
+```
 
+#HSLIDE
 Nieintuicyjny wynik porównania między macierzą i skalaerem pozwolił na uzyskanie prostego i czytelnego API z perspektywy programisty wykorzystującego bibliotekę.
 
 #HSLIDE
@@ -161,10 +165,9 @@ q = q.filter_by(sth in db.Table.column2'')
 q.first()
 ```
 
-query object: Select * from Table
-.filter_by(sth)
-sth := where column 1 == 1
+Wyjaśnienie...
 
+#HSLIDE
 Nieintuicyjny wynik przeciążonej operacji między obiektem reprezentującym kolumnę w tabeli a innym obiektem pozwolił na uzyskanie prostego i czytelnego API z perspektywy programisty wykorzystującego bibliotekę.
 
 #HSLIDE
