@@ -16,15 +16,14 @@ https://youtu.be/wf-BqAjZb8M
 
 #HSLIDE
 ## Plan prezentacji
-1. Na czym polega przeciążanie
-2. Dlaczego warto przeciążać?
-3. Przykłady
+1. Dlaczego warto przeciążać?
+2. Demo na przykładzie bardzo prostej klasy
 4. Czego nie można przeciążyć i dlaczego?
 5. Interesujące przypadki użycia
 
 #HSLIDE
 ```python
-3 * [1,2,3] == [1,2,3,1,2,3,1,2,3]
+3 * [1, 2, 3] == [1, 2, 3, 1, 2, 3, 1, 2, 3]
 
 "GDA" in "PyGDA"
 
@@ -155,7 +154,7 @@ assert red + green + blue == white
 
 #HSLIDE
 ### Sekwencja
-
+```python
 class Color:
     def __init__(self, r, g, b):
         self.r, self.g, self.b = r, g, b
@@ -173,10 +172,10 @@ r, g, b = color
 assert r == 0
 assert g == 127
 assert b == 255
-
+```
 #HSLIDE
 ### Mapa
-
+```python
 class Color:
     def __init__(self, r, g, b):
         self.r, self.g, self.b = r, g, b
@@ -192,7 +191,7 @@ assert len(color) == 3
 assert color['r'] == 0
 assert color['g'] == 127
 assert color['b'] == 255
-
+```
 #HSLIDE
 ### Context manager
 (...)
