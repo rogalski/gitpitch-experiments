@@ -1,2 +1,3 @@
 logo : pygda.png
 highlight : github
+theme-override : PITCHME.css
