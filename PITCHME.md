@@ -5,7 +5,7 @@
 Łukasz Rogalski
 
 #HSLIDE
-## Inspiracja
+## (Luźna) inspiracja
 Raymond Hettinger
 
 *Beyond PEP 8: Best practices for beautiful intelligible code*
@@ -53,10 +53,10 @@ Oczywiście tak! 😉
 _exploting the features of the Python language to produce code that is clear, concise and maintainable_
 
 #HSLIDE
-# Spójrzmy na trochę kodu :)
+## Spójrzmy na trochę kodu :)
 
 #HSLIDE
-## Minimalna definicja klasy
+### Minimalna definicja klasy
 ```python
 class Color:
     def __init__(self, r, g, b):
@@ -68,7 +68,7 @@ print(black)  # <__main__.Color object at (...)>
 print([black, white])  # [<__main__.Color object at (...)>,
                        #  <__main__.Color object at (...)>]
 ```
-### 😞
+## 😞
 
 #HSLIDE
 ```python
@@ -87,7 +87,7 @@ print([black, white])  # [Color(0, 0, 0), Color(255, 255, 255)]
 ```
 
 #HSLIDE
-## Kednoargumentowe przeciążalne operatory
+### Jednoargumentowe przeciążalne operatory
 | __dunder__  | operacje |
 | ------------- | ------------- |
 | `object.__str__`  | `str(object)`  |
@@ -104,7 +104,7 @@ print([black, white])  # [Color(0, 0, 0), Color(255, 255, 255)]
 | `object.__round__(self[, n])` | `float(object[, n])` |
 
 #HSLIDE
-## Operatory dwuargumentowe
+### Operatory dwuargumentowe
 ```python
 class Color:
     def __init__(self, r, g, b):
@@ -132,7 +132,6 @@ black2 = Color(0, 0, 0)
 assert black1 == black2
 ```
 #HSLIDE
-## Operatory dwuargumentowe - `__add__`
 ```python
 class Color:
     def __init__(self, r, g, b):
@@ -144,23 +143,64 @@ class Color:
             min(self.b + other.b, 255)
         )
 
-red, greed = Color(255, 0, 0), Color(0, 255, 0)
+red, green = Color(255, 0, 0), Color(0, 255, 0)
 blue, white = Color(0, 0, 255), Color(255, 255, 255)
 assert red + green + blue == white
 ```
 #HSLIDE
-# Lista operatorów dwuargumentowych
+### Lista operatorów dwuargumentowych
 
 #HSLIDE
-# Typowe idiomy
-- Iterator
-- Sekwencja
+## Typowe idiomy
 
 #HSLIDE
+### Sekwencja
 
+class Color:
+    def __init__(self, r, g, b):
+        self.r, self.g, self.b = r, g, b
+    def __len__(self):
+        return 3
+    def __getitem__(self, index):
+        if index > 2: raise IndexError
+        elif index == 0: return self.r
+        elif index == 1: return self.g
+        else: return self.b
+
+color = Color(0, 127, 255)
+assert len(color) == 3
+r, g, b = color
+assert r == 0
+assert g == 127
+assert b == 255
+
+#HSLIDE
+### Mapa
+
+class Color:
+    def __init__(self, r, g, b):
+        self.r, self.g, self.b = r, g, b
+    def __len__(self):
+        return 3
+    def __getitem__(self, key):
+        if key not in {'r', 'g', 'b'}:
+            raise KeyError(key)
+        return getattr(self, key)
+
+color = Color(0, 127, 255)
+assert len(color) == 3
+assert color['r'] == 0
+assert color['g'] == 127
+assert color['b'] == 255
+
+#HSLIDE
+### Context manager
+(...)
+
+#HSLIDE
 ## Co nie jest przeciążalne?
-#HSLIDE
 
+#HSLIDE
 ### Operator `is`
 
 **Dlaczego?** Bo tak mówi specyfikacja.
@@ -224,7 +264,7 @@ assert array[array > 5] == np.array([6, 7, 8, 9])
 ```
 
 #HSLIDE
-Nieintuicyjny wynik porównania między macierzą i skalaerem pozwolił na uzyskanie prostego i czytelnego API z perspektywy programisty wykorzystującego bibliotekę.
+Nieintuicyjny wynik porównania między macierzą a **skalarem** pozwolił na uzyskanie prostego i czytelnego API z perspektywy programisty wykorzystującego bibliotekę.
 
 #HSLIDE
 ## SQLAlchemy: przykład
@@ -286,7 +326,7 @@ filtered_users = filtered_query.all()
 ```
 
 #HSLIDE
-Nieintuicyjny wynik przeciążonej operacji między obiektem reprezentującym kolumnę w tabeli a innym obiektem pozwolił na uzyskanie prostego i czytelnego API z perspektywy programisty wykorzystującego bibliotekę.
+Nieintuicyjny wynik przeciążonej operacji między **obiektem reprezentującym kolumnę w tabeli** a **innym obiektem** pozwolił na uzyskanie prostego i czytelnego API z perspektywy programisty wykorzystującego bibliotekę.
 
 #HSLIDE
 # Dzięki!
