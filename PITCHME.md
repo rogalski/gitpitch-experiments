@@ -1,7 +1,7 @@
 #HSLIDE
 
 # A niech mnie `__dunder__` świśnie
-### O przeciążaniu operatorów w Pythonie
+### Przeciążanie operatorów w Pythonie
 Łukasz Rogalski
 
 #HSLIDE
@@ -30,18 +30,18 @@ https://youtu.be/wf-BqAjZb8M
 
 (3, 6, 1) > (3, 6, 0)
 
+path = Path()
+path2 = Path / 'subdir'
+
 if obj:
    pass  # ...
 
 with open('pygda.txt', 'w') as f:
     f.write('Hey!')
-
-path = Path()
-path2 = Path / 'subdir'
 ```
 
 #HSLIDE
-- wiele wbudowanych klas (jak i klas w bibliotece standardowej) przeciąża operatory
+- wiele wbudowanych klas (i klas w bibliotece standardowej) przeciąża operatory
 - czy można zaimplementować klasę która przeciąży operator zgodnie z naszymi potrzebami?
 
 Oczywiście tak! 😉
@@ -53,15 +53,58 @@ Oczywiście tak! 😉
 _exploting the features of the Python language to produce code that is clear, concise and maintainable_
 
 #HSLIDE
+# Spójrzmy na trochę kodu :)
+
+#HSLIDE
+## Minimalna definicja klasy
 ```python
 class Color:
     def __init__(self, r, g, b):
        self.r, self.g, self.b = r, g, b
 
-black = Color (0, 0, 0)
+black = Color(0, 0, 0)
+white = Color(0xFF, 0xFF, 0xFF)
+print(black)  # <__main__.Color object at (...)>
+print([black, white]])  # [<__main__.Color object at (...)>,
+                        #  <__main__.Color object at (...)>]
+```
+### 😞
+
+#HSLIDE
+```python
+class Color:
+    def __init__(self, r, g, b):
+       self.r, self.g, self.b = r, g, b
+    def __str__(self):
+        return "#{:02X}{:02X}{:02X}".format(self.r, self.g, self.b)
+    def __repr__(self):
+        return "Color({}, {}, {})".format(self.r, self.g, self.b)
+
+black = Color(0, 0, 0)
+white = Color(0xFF, 0xFF, 0xFF)
+print(black)  # #000000
+print([black, white]])  # [Color(0, 0, 0), Color(255, 255, 255)]
 ```
 
 #HSLIDE
+## Przykładowe jednoargumentowe przeciążalne operatory
+- `object.__str__` - `str(object)`
+- `object.__repr__` - `repr(object)`
+- `object.__bool__` - `if object: pass`
+
+- `object.__neg__(self)` - `-object`
+- `object.__pos__(self)` - `+object`
+- `object.__abs__(self)` - `abs(object)`
+- `object.__invert__(self)` - `~object`
+
+- `object.__complex__(self)` - `complex(object)`
+- `object.__int__(self)` - `int(object)`
+- `object.__float__(self)` - `float(object)`
+- `object.__round__(self[, n])` - `float(object[, n])`
+(...)
+
+#HSLIDE
+## Operatory dwuargumentowe - `__eq__`
 ```python
 class Color:
     def __init__(self, r, g, b):
@@ -89,13 +132,39 @@ black2 = Color(0, 0, 0)
 assert black1 == black2
 ```
 #HSLIDE
+## Operatory dwuargumentowe - `__add__`
+```python
+class Color:
+    def __init__(self, r, g, b):
+        self.r, self.g, self.b = r, g, b
+    def __add__(self, other):
+        return type(self)(
+            self.r + other.r,
+            self.g + other.g,
+            self.b + other.b
+        )
 
-## Co nie jest przeciążalne
+red = Color(0xFF, 0, 0)
+green = Color(0, 0xFF, 0)
+blue = Color(0, 0, 0xFF)
+white = Color(0xFF, 0xFF, 0xFF)
+assert red + green + blue == white
+```
+#HSLIDE
+# Lista operatorów dwuargumentowych
+
+#HSLIDE
+# Typowe idiomy
+Klasa iterowalna
+
+#HSLIDE
+
+## Co nie jest przeciążalne?
 #HSLIDE
 
 ### Operator tożsamości (ang. _identity_) - `is`
 
-Dlaczego? Bo tak mówi specyfikacja.
+**Dlaczego?** Bo tak mówi specyfikacja.
 
 _Every object has an identity, a type and a value. An object’s identity never changes once it has been created; you may think of it as the object’s address in memory. The `is` operator compares the identity of two objects; the `id()` function returns an integer representing its identity._
 #HSLIDE
@@ -104,14 +173,12 @@ _Every object has an identity, a type and a value. An object’s identity never 
 
 `my_obj1 and my_obj2`
 
-#### Dlaczego?
-
-Aby wykonać metodę, konieczne jest obliczenie wartości wszystkich argumentów wejściowych. Wykonanie tych argumentów powoduje złamanie zasady leniwego wykonania, która jest zagwarantowana.
+**Dlaczego?** Aby wykonać metodę, konieczne jest obliczenie wartości wszystkich argumentów wejściowych, co łamałoby zasadę leniwego wykonania wyrażenia logicznego.
 
 - ❌     `a or b`
-- ✅     `a | b`     `# __or__`
+- ✅     `a | b`     (dunder: `__or__`)
 - ❌     `a and b`
-- ✅     `a & b`     `# __and__`
+- ✅     `a & b`     (dunder: `__and__`)
 
 #HSLIDE
 ## Interesujące przypadki użycia
@@ -123,7 +190,7 @@ Co powinno zwrócić `a < b`?
 - Coś innego?
 
 #HSLIDE
-## Numpy: przykład 1
+## Numpy: przykład
 ```python
 import numpy as np
 array = np.array(range(10))
@@ -134,7 +201,7 @@ bigger_than_5
 ```
 
 #HSLIDE
-## Numpy: tłumaczenie (1)
+## Numpy: analiza
 
 - `np.array` przeciąża operator `__gt__`
 - wynik działania: macierz wartości typu _boolean_ o tych samych wymiarach co bazowa macierz
@@ -146,10 +213,10 @@ array > 5 # array([False, False, False, False, False, False,
 ```
 
 #HSLIDE
-### Numpy: tłumaczenie (2)
+### Numpy: analiza
 
 - `np.array` przeciąża operator `__getitem__`
-- kiedy objekt wewnątrz nawiasów kwadratowych jest macierzą typu _boolean_, zwracany jest podzbiór macierzy wejściowej (z wybranymi wierszami i kolumnami)
+- kiedy obiekt wewnątrz nawiasów kwadratowych jest macierzą typu _boolean_, zwracany jest podzbiór macierzy wejściowej (z wybranymi wierszami i kolumnami)
 
 ```python
 array = np.array(range(10))
@@ -169,7 +236,59 @@ q = q.filter_by(sth in db.Table.column2'')
 q.first()
 ```
 
-Wyjaśnienie...
+#HSLIDE
+```python
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
+
+class User(Base):
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    fullname = Column(String)
+    password = Column(String)
+
+    def __repr__(self):
+        return "<User(name='%s', fullname='%s', password='%s')>" % (
+            self.name, self.fullname, self.password)
+```
+#HSLIDE
+```python
+session = Session()  # object representing DB session
+
+session.add_all([
+    User(name='ed', fullname='Ed Jones', password='edspassword'),
+    User(name='wendy', fullname='Wendy Williams', password='foobar'),
+    User(name='mary', fullname='Mary Contrary', password='xxg527'),
+    User(name='fred', fullname='Fred Flinstone', password='blah')
+])
+session.commit()
+```
+#HSLIDE
+```python
+users = session.query(User).filter(User.name == 'fred').all()
+print(users)
+# [<User(name='fred', fullname='Fred Flinstone', password='blah')>]
+```
+
+#HSLIDE
+## SQLAlchemy: analiza
+```python
+my_query = session.query(User)  # <sqlalchemy.orm.query.Query object at (...)>
+# SELECT users.id AS users_id, (...) FROM users
+
+my_filter = User.name == 'fred' # <sqlalchemy.sql.elements.BinaryExpression object at (...)>
+# users.name = :name_1
+
+filtered_query = my_query.filter(my_filter)  # <sqlalchemy.orm.query.Query object at (...)>
+# SELECT users.id AS users_id, (...) FROM users WHERE users.name = ?
+
+filtered_users = filtered_query.all()
+# [<User(name='fred', fullname='Fred Flinstone', password='blah')>]
+```
 
 #HSLIDE
 Nieintuicyjny wynik przeciążonej operacji między obiektem reprezentującym kolumnę w tabeli a innym obiektem pozwolił na uzyskanie prostego i czytelnego API z perspektywy programisty wykorzystującego bibliotekę.
