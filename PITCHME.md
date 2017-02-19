@@ -63,10 +63,10 @@ class Color:
        self.r, self.g, self.b = r, g, b
 
 black = Color(0, 0, 0)
-white = Color(0xFF, 0xFF, 0xFF)
+white = Color(255, 255, 255)
 print(black)  # <__main__.Color object at (...)>
-print([black, white]])  # [<__main__.Color object at (...)>,
-                        #  <__main__.Color object at (...)>]
+print([black, white])  # [<__main__.Color object at (...)>,
+                       #  <__main__.Color object at (...)>]
 ```
 ### 😞
 
@@ -81,30 +81,30 @@ class Color:
         return "Color({}, {}, {})".format(self.r, self.g, self.b)
 
 black = Color(0, 0, 0)
-white = Color(0xFF, 0xFF, 0xFF)
-print(black)  # #000000
-print([black, white]])  # [Color(0, 0, 0), Color(255, 255, 255)]
+white = Color(255, 255, 255)
+print('Color:', black)  # Color: #000000
+print([black, white])  # [Color(0, 0, 0), Color(255, 255, 255)]
 ```
 
 #HSLIDE
-## Przykładowe jednoargumentowe przeciążalne operatory
-- `object.__str__` - `str(object)`
-- `object.__repr__` - `repr(object)`
-- `object.__bool__` - `if object: pass`
-
-- `object.__neg__(self)` - `-object`
-- `object.__pos__(self)` - `+object`
-- `object.__abs__(self)` - `abs(object)`
-- `object.__invert__(self)` - `~object`
-
-- `object.__complex__(self)` - `complex(object)`
-- `object.__int__(self)` - `int(object)`
-- `object.__float__(self)` - `float(object)`
-- `object.__round__(self[, n])` - `float(object[, n])`
-(...)
+## Kednoargumentowe przeciążalne operatory
+| __dunder__  | operacje |
+| ------------- | ------------- |
+| `object.__str__`  | `str(object)`  |
+| `object.__repr__`  | `repr(object)`  |
+| `object.__bool__` | `if object: pass`
+| `object.__len__` | `len(object)`
+| `object.__neg__(self)` | `-object` |
+| `object.__pos__(self)` | `+object` |
+| `object.__abs__(self)` | `abs(object)` |
+| `object.__invert__(self)` | `~object` |
+| `object.__complex__(self)` | `complex(object)` |
+| `object.__int__(self)` | `int(object)` |
+| `object.__float__(self)` | `float(object)` |
+| `object.__round__(self[, n])` | `float(object[, n])` |
 
 #HSLIDE
-## Operatory dwuargumentowe - `__eq__`
+## Operatory dwuargumentowe
 ```python
 class Color:
     def __init__(self, r, g, b):
@@ -139,15 +139,13 @@ class Color:
         self.r, self.g, self.b = r, g, b
     def __add__(self, other):
         return type(self)(
-            self.r + other.r,
-            self.g + other.g,
-            self.b + other.b
+            min(self.r + other.r, 255),
+            min(self.g + other.g, 255),
+            min(self.b + other.b, 255)
         )
 
-red = Color(0xFF, 0, 0)
-green = Color(0, 0xFF, 0)
-blue = Color(0, 0, 0xFF)
-white = Color(0xFF, 0xFF, 0xFF)
+red, greed = Color(255, 0, 0), Color(0, 255, 0)
+blue, white = Color(0, 0, 255), Color(255, 255, 255)
 assert red + green + blue == white
 ```
 #HSLIDE
@@ -155,14 +153,15 @@ assert red + green + blue == white
 
 #HSLIDE
 # Typowe idiomy
-Klasa iterowalna
+- Iterator
+- Sekwencja
 
 #HSLIDE
 
 ## Co nie jest przeciążalne?
 #HSLIDE
 
-### Operator tożsamości (ang. _identity_) - `is`
+### Operator `is`
 
 **Dlaczego?** Bo tak mówi specyfikacja.
 
@@ -173,15 +172,16 @@ _Every object has an identity, a type and a value. An object’s identity never 
 
 `my_obj1 and my_obj2`
 
-**Dlaczego?** Aby wykonać metodę, konieczne jest obliczenie wartości wszystkich argumentów wejściowych, co łamałoby zasadę leniwego wykonania wyrażenia logicznego.
+**Dlaczego?**
+Aby wykonać metodę trzeba obliczyć wartości wszystkich argumentów wejściowych, co łamałoby zasadę _leniwego wykonania_ wyrażenia logicznego.
 
-- ❌     `a or b`
-- ✅     `a | b`     (dunder: `__or__`)
-- ❌     `a and b`
-- ✅     `a & b`     (dunder: `__and__`)
+- ☒    `a or b`
+- ☑    `a | b`     (dunder: `__or__`)
+- ☒     `a and b`
+- ☑     `a & b`     (dunder: `__and__`)
 
 #HSLIDE
-## Interesujące przypadki użycia
+## Ciekawe przypadki
 
 Co powinno zwrócić `a < b`?
 - `NotImplementedError`
@@ -228,21 +228,11 @@ Nieintuicyjny wynik porównania między macierzą i skalaerem pozwolił na uzysk
 
 #HSLIDE
 ## SQLAlchemy: przykład
-
-```python
-q = db.Table.query
-q = q.filter_by(db.Table.column1 == '123')
-q = q.filter_by(sth in db.Table.column2'')
-q.first()
-```
-
 #HSLIDE
 ```python
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
-
 Base = declarative_base()
-
 class User(Base):
     __tablename__ = 'users'
 
@@ -256,6 +246,7 @@ class User(Base):
             self.name, self.fullname, self.password)
 ```
 #HSLIDE
+## SQLAlchemy: przykład
 ```python
 session = Session()  # object representing DB session
 
@@ -268,6 +259,7 @@ session.add_all([
 session.commit()
 ```
 #HSLIDE
+## SQLAlchemy: przykład
 ```python
 users = session.query(User).filter(User.name == 'fred').all()
 print(users)
@@ -277,14 +269,17 @@ print(users)
 #HSLIDE
 ## SQLAlchemy: analiza
 ```python
-my_query = session.query(User)  # <sqlalchemy.orm.query.Query object at (...)>
-# SELECT users.id AS users_id, (...) FROM users
+my_query = session.query(User)
+# repr: <sqlalchemy.orm.query.Query object at (...)>
+# str: SELECT users.id AS users_id, (...) FROM users
 
-my_filter = User.name == 'fred' # <sqlalchemy.sql.elements.BinaryExpression object at (...)>
-# users.name = :name_1
+my_filter = User.name == 'fred'
+# repr: <sqlalchemy.sql.elements.BinaryExpression object at (...)>
+# str: users.name = :name_1
 
-filtered_query = my_query.filter(my_filter)  # <sqlalchemy.orm.query.Query object at (...)>
-# SELECT users.id AS users_id, (...) FROM users WHERE users.name = ?
+filtered_query = my_query.filter(my_filter)
+# repr: <sqlalchemy.orm.query.Query object at (...)>
+# str: SELECT users.id AS users_id, (...) FROM users WHERE users.name = ?
 
 filtered_users = filtered_query.all()
 # [<User(name='fred', fullname='Fred Flinstone', password='blah')>]
