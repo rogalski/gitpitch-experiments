@@ -158,10 +158,9 @@ class Point:
 class Circle:
     def __init__(self, c, r):
         self.c, self.r = c, r
-    def __contains__(self, point):
-        dx = point.x - self.x
-        dy = point.y - self.y
-        return dx*dx + dy*dy <= self.r * self.r
+    def __contains__(self, p):
+        dx, dy = p.x - self.c.x, p.y - self.c.y
+        return (dx*dx + dy*dy) <= (self.r * self.r)
 
 circle = Circle(Point(0, 0), 4)
 point = Point(3, 2)
