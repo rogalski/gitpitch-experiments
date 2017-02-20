@@ -46,13 +46,13 @@ with open('pygda.txt', 'w') as f:
 Oczywiście tak! 😉
 
 #HSLIDE
-## Cel
-**pythonic**
+## Po co?
+**being *pythonic***
 
 _exploting the features of the Python language to produce code that is clear, concise and maintainable_
 
 #HSLIDE
-## Spójrzmy na trochę kodu :)
+## Spójrzmy na trochę kodu 😊
 
 #HSLIDE
 ### Minimalna definicja klasy
@@ -70,6 +70,7 @@ print([black, white])  # [<__main__.Color object at (...)>,
 ## 😞
 
 #HSLIDE
+### Po uzupełnieniu
 ```python
 class Color:
     def __init__(self, r, g, b):
@@ -87,20 +88,11 @@ print([black, white])  # [Color(0, 0, 0), Color(255, 255, 255)]
 
 #HSLIDE
 ### Jednoargumentowe przeciążalne operatory
-| __dunder__  | operacje |
-| ------------- | ------------- |
-| `object.__str__`  | `str(object)`  |
-| `object.__repr__`  | `repr(object)`  |
-| `object.__bool__` | `if object: pass`
-| `object.__len__` | `len(object)`
-| `object.__neg__(self)` | `-object` |
-| `object.__pos__(self)` | `+object` |
-| `object.__abs__(self)` | `abs(object)` |
-| `object.__invert__(self)` | `~object` |
-| `object.__complex__(self)` | `complex(object)` |
-| `object.__int__(self)` | `int(object)` |
-| `object.__float__(self)` | `float(object)` |
-| `object.__round__(self[, n])` | `float(object[, n])` |
+- `str(obj)`, `repr(obj)`, `len(obj)`
+- `+obj`, `-obj`, `abs(obj)`, `~obj`
+- `int(obj)`, `float(obj)`, `complex(obj)`, `round(obj)`
+- `iter(obj)` [czyli również `for in obj:`]
+- `reversed(obj)`
 
 #HSLIDE
 ### Operatory dwuargumentowe
@@ -115,6 +107,7 @@ assert black1 == black2  # AssertionError!
 ```
 
 #HSLIDE
+#### Porównywanie
 ```python
 class Color:
     def __init__(self, r, g, b):
@@ -131,6 +124,7 @@ black2 = Color(0, 0, 0)
 assert black1 == black2
 ```
 #HSLIDE
+#### Dodawanie
 ```python
 class Color:
     def __init__(self, r, g, b):
@@ -147,8 +141,43 @@ blue, white = Color(0, 0, 255), Color(255, 255, 255)
 assert red + green + blue == white
 ```
 #HSLIDE
+
+#HSLIDE
+### Członkowstwo (`in`)
+- operator tradycyjnie kojarzony z kolekcjami (lista, słownik itd.)
+- nie musi być skojarzony z kolekcją!
+- `if needle in haystack` - działa inaczej niż dla innych kolekcji!
+- `range` w Pythonie 3 nie jest listą, a wspiera `number in range(min, max, step)`)
+
+#HSLIDE
+```python
+class Point:
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+
+class Circle:
+    def __init__(self, c, r):
+        self.c, self.r = c, r
+    def __contains__(self, point):
+        dx = point.x - self.x
+        dy = point.y - self.y
+        return dx*dx + dy*dy <= self.r * self.r
+
+circle = Circle(Point(0, 0), 4)
+point = Point(3, 2)
+assert point in circle
+```
+
 ### Lista operatorów dwuargumentowych
-(...)
+- `a + b`, `a += b`
+- `a - b`, `a -= b`
+- `a * b`, `a *= b`
+- `a / b`, `a /= b`
+- `a // b`, `a //= b`
+- `a << b`, `a >> b`
+- (...)
+- `a in b`
+- `a[b]`, `a[b] = ...`, `del a[b]`
 
 #HSLIDE
 ## Typowe idiomy
