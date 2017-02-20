@@ -169,15 +169,15 @@ assert point in circle
 ```
 #HSLIDE
 ### Lista operatorów dwuargumentowych
-- `a + b` `a += b`
-- `a - b` `a -= b`
-- `a * b` `a *= b`
-- `a / b` `a /= b`
-- `a // b`  `a //= b`
-- `a << b`  `a >> b`
+- `a + b`   `a += b`
+- `a - b`   `a -= b`
+- `a * b`   `a *= b`
+- `a / b`   `a /= b`
+- `a // b`    `a //= b`
+- `a << b`    `a >> b`
 - (...)
 - `a in b`
-- `a[b]`  `a[b] = ...`  `del a[b]`
+- `a[b]`    `a[b] = ...`    `del a[b]`
 
 #HSLIDE
 ## Typowe idiomy
@@ -302,7 +302,7 @@ assert array[array > 5] == np.array([6, 7, 8, 9])
 ```
 
 #HSLIDE
-Nieintuicyjny wynik porównania między macierzą a **skalarem** pozwolił na uzyskanie prostego i czytelnego API z perspektywy programisty wykorzystującego bibliotekę.
+Nieintuicyjny wynik porównania między **macierzą** a **skalarem** pozwolił na uzyskanie prostego i czytelnego API z perspektywy programisty wykorzystującego bibliotekę.
 
 #HSLIDE
 ## SQLAlchemy: przykład
