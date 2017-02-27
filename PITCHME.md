@@ -91,7 +91,7 @@ print([black, white])  # [Color(0, 0, 0), Color(255, 255, 255)]
 - `str(obj)`, `repr(obj)`, `len(obj)`
 - `+obj`, `-obj`, `abs(obj)`, `~obj`
 - `int(obj)`, `float(obj)`, `complex(obj)`, `round(obj)`
-- `iter(obj)` [czyli również `for in obj:`]
+- `iter(obj)` [czyli również `for ... in obj:`]
 - `reversed(obj)`
 - (...)
 
@@ -193,42 +193,6 @@ assert color['r'] == 0
 assert color['g'] == 127
 assert color['b'] == 255
 ```
-
-#HSLIDE
-### Członkowstwo (`in`)
-- operator tradycyjnie kojarzony z kolekcjami (lista, słownik itd.)
-- **nie musi** działać na kolekcji
-- `if needle in haystack` - działa inaczej niż dla innych kolekcji
-- `range` w Pythonie 3 nie jest listą, a wspiera `number in range(min, max, step)`
-
-#HSLIDE
-```python
-class Point:
-    def __init__(self, x, y):
-        self.x, self.y = x, y
-
-class Circle:
-    def __init__(self, c, r):
-        self.c, self.r = c, r
-    def __contains__(self, p):
-        dx, dy = p.x - self.c.x, p.y - self.c.y
-        return (dx*dx + dy*dy) <= (self.r * self.r)
-
-circle = Circle(Point(0, 0), 4)
-point = Point(3, 2)
-assert point in circle
-```
-#HSLIDE
-### Lista operatorów dwuargumentowych
-- `a + b`        `a += b`
-- `a - b`        `a -= b`
-- `a * b`        `a *= b`
-- `a / b`        `a /= b`
-- `a // b`        `a //= b`
-- `a << b`        `a >> b`
-- (...)
-- `a in b`
-- `a[b]`        `a[b] = ...`        `del a[b]`
 
 #HSLIDE
 ### Inne
