@@ -143,6 +143,58 @@ assert red + green + blue == white
 ```
 
 #HSLIDE
+### Sekwencja
+```python
+class Color:
+    def __init__(self, r, g, b):
+        self.r, self.g, self.b = r, g, b
+    def __len__(self):
+        return 3
+    def __getitem__(self, index):
+        if index > 2:
+            raise IndexError(index)
+        elif index == 0:
+            return self.r
+        elif index == 1:
+            return self.g
+        else:
+            return self.b
+```
+
+#HSLIDE
+### Sekwencja
+```python
+color = Color(0, 127, 255)
+assert len(color) == 3
+assert color[0] == 0
+assert color[1] == 127
+assert color[2] == 255
+r, g, b = color
+assert r == 0
+assert g == 127
+assert b == 255
+for component in color:
+    print(component, end=" ")  # 0 127 255
+```
+
+#HSLIDE
+### Mapa
+```python
+class Color:
+    def __init__(self, r, g, b):
+        self.r, self.g, self.b = r, g, b
+    def __getitem__(self, key):
+        if key not in {'r', 'g', 'b'}:
+            raise KeyError(key)
+        return getattr(self, key)
+
+color = Color(0, 127, 255)
+assert color['r'] == 0
+assert color['g'] == 127
+assert color['b'] == 255
+```
+
+#HSLIDE
 ### Członkowstwo (`in`)
 - operator tradycyjnie kojarzony z kolekcjami (lista, słownik itd.)
 - **nie musi** działać na kolekcji
@@ -168,71 +220,22 @@ assert point in circle
 ```
 #HSLIDE
 ### Lista operatorów dwuargumentowych
-- `a + b`   `a += b`
-- `a - b`   `a -= b`
-- `a * b`   `a *= b`
-- `a / b`   `a /= b`
-- `a // b`    `a //= b`
-- `a << b`    `a >> b`
+- `a + b`        `a += b`
+- `a - b`        `a -= b`
+- `a * b`        `a *= b`
+- `a / b`        `a /= b`
+- `a // b`        `a //= b`
+- `a << b`        `a >> b`
 - (...)
 - `a in b`
-- `a[b]`    `a[b] = ...`    `del a[b]`
+- `a[b]`        `a[b] = ...`        `del a[b]`
 
 #HSLIDE
-## Typowe idiomy
-
-#HSLIDE
-### Sekwencja
-```python
-class Color:
-    def __init__(self, r, g, b):
-        self.r, self.g, self.b = r, g, b
-    def __len__(self):
-        return 3
-    def __getitem__(self, index):
-        if index > 2:
-            raise IndexError(index)
-        elif index == 0:
-            return self.r
-        elif index == 1:
-            return self.g
-        else:
-            return self.b
-```
-#HSLIDE
-### Sekwencja
-```python
-color = Color(0, 127, 255)
-assert len(color) == 3
-assert color[0] == 0
-assert color[1] == 127
-assert color[2] == 255
-r, g, b = color
-assert r == 0
-assert g == 127
-assert b == 255
-for component in color:
-    print(component, end=" ")  # 0 127 255
-```
-#HSLIDE
-### Mapa
-```python
-class Color:
-    def __init__(self, r, g, b):
-        self.r, self.g, self.b = r, g, b
-    def __getitem__(self, key):
-        if key not in {'r', 'g', 'b'}:
-            raise KeyError(key)
-        return getattr(self, key)
-
-color = Color(0, 127, 255)
-assert color['r'] == 0
-assert color['g'] == 127
-assert color['b'] == 255
-```
-#HSLIDE
-### Context manager
-(...)
+### Inne
+- context manager
+- generatory
+- `asyncio` (async, await itd.)
+- (...)
 
 #HSLIDE
 ## Co nie jest przeciążalne?
@@ -372,4 +375,4 @@ Nieintuicyjny wynik przeciążonej operacji między **obiektem reprezentującym 
 # Linki
 - [Python Data Model](https://docs.python.org/3/reference/datamodel.html)
 - [R. Hettinger *Beyond PEP 8 -- Best practices for beautiful intelligible code*](https://youtu.be/wf-BqAjZb8M)
-- [Slides](github.com/rogalski/pygda22_dunders)
+- [Slides](https://github.com/rogalski/pygda22_dunders)
